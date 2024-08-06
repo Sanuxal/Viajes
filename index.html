@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificación de Viajes</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        form:hover {
+            transform: scale(1.02);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, button:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .resultados {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Planificación de Viajes de Autocares</h1>
+    </header>
+    <main>
+        <form id="planificacionForm">
+            <h2>Datos de Conductores</h2>
+            <label for="numConductores">Número de Conductores:</label>
+            <input type="number" id="numConductores" name="numConductores" required><br><br>
+            <div id="conductoresContainer"></div>
+            <button type="button" onclick="agregarConductores()">Agregar Conductores</button><br><br>
+
+            <h2>Datos de Autocares</h2>
+            <label for="numAutocares">Número de Autocares:</label>
+            <input type="number" id="numAutocares" name="numAutocares" required><br><br>
+
+            <h2>Datos de Viajes</h2>
+            <label for="numViajes">Número de Viajes:</label>
+            <input type="number" id="numViajes" name="numViajes" required><br><br>
+            <div id="viajesContainer"></div>
+            <button type="button" onclick="agregarViajes()">Agregar Viajes</button><br><br>
+
+            <h2>Hora de Inicio</h2>
+            <label for="horaInicio">Hora de Inicio:</label>
+            <input type="time" id="horaInicio" name="horaInicio" required><br><br>
+
+            <button type="button" onclick="planificarViajes()">Planificar</button>
+        </form>
+
+        <h2>Resultados</h2>
+        <div id="resultados" class="resultados"></div>
+    </main>
+    <script>
+        function agregarConductores() {
+            const numConductores = document.getElementById('numConductores').value;
+            const conductoresContainer = document.getElementById('conductoresContainer');
+            conductoresContainer.innerHTML = '';
+
+            for (let i = 0; i < numConductores; i++) {
+                const label = document.createElement('label');
+                label.textContent = `Nombre del Conductor ${i + 1}:`;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = `nombreConductor${i}`;
+                input.name = `nombreConductor${i}`;
+                input.required = true;
+                conductoresContainer.appendChild(label);
+                conductoresContainer.appendChild(input);
+                conductoresContainer.appendChild(document.createElement('br'));
+            }
+        }
+
+        function agregarViajes() {
+            const numViajes = document.getElementById('numViajes').value;
+            const viajesContainer = document.getElementById('viajesContainer');
+            viajesContainer.innerHTML = '';
+
+            for (let i = 0; i < numViajes; i++) {
+                const labelInicio = document.createElement('label');
+                labelInicio.textContent = `Inicio del Viaje ${i + 1}:`;
+                const inputInicio = document.createElement('input');
+                inputInicio.type = 'text';
+                inputInicio.id = `inicioViaje${i}`;
+                inputInicio.name = `inicioViaje${i}`;
+                inputInicio.required = true;
+
+                const labelDestino = document.createElement('label');
+                labelDestino.textContent = `Destino del Viaje ${i + 1}:`;
+                const inputDestino = document.createElement('input');
+                inputDestino.type = 'text';
+                inputDestino.id = `destinoViaje${i}`;
+                inputDestino.name = `destinoViaje${i}`;
+                inputDestino.required = true;
+
+                const labelDuracion = document.createElement('label');
+                labelDuracion.textContent = `Duración del Viaje ${i + 1} (horas):`;
+                const inputDuracion = document.createElement('input');
+                inputDuracion.type = 'number';
+                inputDuracion.id = `duracionViaje${i}`;
+                inputDuracion.name = `duracionViaje${i}`;
+                inputDuracion.required = true;
+
+                viajesContainer.appendChild(labelInicio);
+                viajesContainer.appendChild(inputInicio);
+                viajesContainer.appendChild(document.createElement('br'));
+                viajesContainer.appendChild(labelDestino);
+                viajesContainer.appendChild(inputDestino);
+                viajesContainer.appendChild(document.createElement('br'));
+                viajesContainer.appendChild(labelDuracion);
+                viajesContainer.appendChild(inputDuracion);
+                viajesContainer.appendChild(document.createElement('br'));
+            }
+        }
+
+        function incrementarHora(hora, duracion) {
+            const [horas, minutos] = hora.split(':').map(Number);
+            const totalMinutos = horas * 60 + minutos + duracion * 60;
+            const nuevasHoras = Math.floor(totalMinutos / 60) % 24;
+            const nuevosMinutos = totalMinutos % 60;
+            return `${nuevasHoras.toString().padStart(2, '0')}:${nuevosMinutos.toString().padStart(2, '0')}`;
+        }
+
+        function planificarViajes() {
+            const numConductores = document.getElementById('numConductores').value;
+            const numAutocares = document.getElementById('numAutocares').value;
+            const numViajes = document.getElementById('numViajes').value;
+            const horaInicio = document.getElementById('horaInicio').value;
+
+            // Crear listas de conductores y autocares
+            const conductores = Array.from({ length: numConductores }, (_, i) => ({
+                id: i,
+                nombre: document.getElementById(`nombreConductor${i}`).value,
+                horasConducidas: 0,
+                descansos: 0,
+                viajes: []
+            }));
+            const autocares = Array.from({ length: numAutocares }, (_, i) => ({ id: i, viajes: [] }));
+            const viajes = Array.from({ length: numViajes }, (_, i) => ({
+                id: i,
+                inicio: document.getElementById(`inicioViaje${i}`).value,
+                destino: document.getElementById(`destinoViaje${i}`).value,
+                duracion: parseInt(document.getElementById(`duracionViaje${i}`).value)
+            }));
+
+            // Base en Lleida, Catalunya
+            const base = 'Lleida, Catalunya';
+
+            // Algoritmo de planificación optimizado
+            let horaActual = horaInicio;
+            viajes.sort((a, b) => a.duracion - b.duracion); // Ordenar viajes por duración
+
+            for (const viaje of viajes) {
+                const conductor = conductores.shift();
+                const autocar = autocares.shift();
+
+                // Calcular duración total incluyendo ida y vuelta a la base
+                const duracionTotal = viaje.duracion + 2; // Asumimos 1 hora de ida y 1 hora de vuelta a la base
+
+                if (conductor.horasConducidas + duracionTotal <= 9) {
+                    conductor.horasConducidas += duracionTotal;
+                    autocar.viajes.push({ ...viaje, horaInicio: horaActual });
+                    conductor.viajes.push({ ...viaje, horaInicio: horaActual });
+                } else {
+                    conductor.descansos += 1;
+                    conductor.horasConducidas = duracionTotal;
+                    autocar.viajes.push({ ...viaje, horaInicio: horaActual });
+                    conductor.viajes.push({ ...viaje, horaInicio: horaActual });
+                }
+
+                horaActual = incrementarHora(horaActual, duracionTotal);
+                conductores.push(conductor);
+                autocares.push(autocar);
+            }
+
+            // Mostrar resultados en tablas
+            let resultados = '<h3>Planificación de Autocares</h3>';
+            resultados += '<table><tr><th>Autocar</th><th>Viaje</th><th>Inicio</th><th>Destino</th><th>Duración</th><th>Hora de Inicio</th></tr>';
+            for (const autocar of autocares) {
+                for (const viaje of autocar.viajes) {
+                    resultados += `<tr><td>${autocar.id}</td><td>${viaje.id}</td><td>${viaje.inicio}</td><td>${viaje.destino}</td><td>${viaje.duracion} horas</td><td>${viaje.horaInicio}</td></tr>`;
+                }
+            }
+            resultados += '</table>';
+
+            resultados += '<h3>Planificación de Conductores</h3>';
+            resultados += '<table><tr><th>Conductor</th><th>Viaje</th><th>Inicio</th><th>Destino</th><th>Duración</th><th>Hora de Inicio</th><th>Horas Conducidas</th><th>Descansos</th></tr>';
+            for (const conductor of conductores) {
+                for (const viaje of conductor.viajes) {
+                    resultados += `<tr><td>${conductor.nombre}</td><td>${viaje.id}</td><td>${viaje.inicio}</td><td>${viaje.destino}</td><td>${viaje.duracion} horas</td><td>${viaje.horaInicio}</td><td>${conductor.horasConducidas}</td><td>${conductor.descansos}</td></tr>`;
+                }
+            }
+            resultados += '</table>';
+
+            document.getElementById('resultados').innerHTML = resultados;
+        }
+    </script>
+</body>
+</html>
